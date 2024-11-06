@@ -11,42 +11,76 @@ import java.util.Objects;
 
 public class User {
 
-	private String nickname;
-	private String password;
+	private String name;
+	private String birthdate;
+	private String height;
+	private String weight;
+	private int maxHR;
+	private int restHR;
 	private String email;
-	private List<Bid> bids = new ArrayList<>();
-	private List<Article> articles = new ArrayList<>();
+	private List<TrainingSession> trainingSessions = new ArrayList<>();
 	
 	// Constructor without parameters
-	public User() { }
+	public User() {}
 	
 	// Constructor with parameters
-	public User(String nickname, String email, String password) {
-		this.nickname = nickname;		
+	public User(String name, String birthdate, String height, String weight, int maxHR, int restHR, String email) {
+		this.name = name;
+		this.birthdate = birthdate;
+		this.height = height;
+		this.weight = weight;
+		this.maxHR = maxHR;
+		this.restHR = restHR;
 		this.email = email;
-		this.password = password;
-	}
-	
-	// Check if a password is correct
-	public boolean checkPassword(String password) {
-        return this.password.equals(password);
 	}
 
 	//  Getters and setters
-	public String getNickname() {
-		return nickname;
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
+	public String getBirthdate() {
+		return birthdate;
 	}
 
-	public String getPassword() {
-		return password;
+	public void setBirthdate(String birthdate) {
+		this.birthdate = birthdate;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public String getHeight() {
+		return height;
+	}
+
+	public void setHeight(String height) {
+		this.height = height;
+	}
+
+	public String getWeight() {
+		return weight;
+	}
+
+	public void setWeight(String weight) {
+		this.weight = weight;
+	}
+
+	public int getMaxHR() {
+		return maxHR;
+	}
+
+	public void setMaxHR(int maxHR) {
+		this.maxHR = maxHR;
+	}
+
+	public int getRestHR() {
+		return restHR;
+	}
+
+	public void setRestHR(int restHR) {
+		this.restHR = restHR;
 	}
 
 	public String getEmail() {
@@ -57,26 +91,18 @@ public class User {
 		this.email = email;
 	}
 
-	public List<Bid> getBids() {
-		return bids;
+	public List<TrainingSession> getTrainingSessions() {
+		return trainingSessions;
 	}
 
-	public void setBids(List<Bid> bids) {
-		this.bids = bids;
-	}
-
-	public List<Article> getArticles() {
-		return articles;
-	}
-
-	public void setArticles(List<Article> articles) {
-		this.articles = articles;
+	public void setTrainingSessions(List<TrainingSession> trainingSessions) {
+		this.trainingSessions = trainingSessions;
 	}
 
 	// hashCode and equals
 	@Override
 	public int hashCode() {
-		return Objects.hash(email, nickname);
+		return Objects.hash(email, name);
 	}
 
 	@Override
@@ -89,6 +115,6 @@ public class User {
 			return false;
 		User other = (User) obj;
 		return Objects.equals(email, other.email) && 
-			   Objects.equals(nickname, other.nickname);
+			   Objects.equals(name, other.name);
 	}
 }
