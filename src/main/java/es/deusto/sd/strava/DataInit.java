@@ -21,7 +21,7 @@ import es.deusto.sd.strava.dto.ChallengeDTO;
 @Configuration
 public class DataInit {
 
-    private static final Logger logger = LoggerFactory.getLogger(DataInitializer.class);
+    private static final Logger logger = LoggerFactory.getLogger(DataInit.class);
 
     @Bean
     CommandLineRunner initData(/*UserService userService, */TrainingSessionService trainingSessionService, ChallengeService challengeService) {
