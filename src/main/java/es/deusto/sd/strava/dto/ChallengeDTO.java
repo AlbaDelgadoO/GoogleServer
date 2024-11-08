@@ -8,15 +8,15 @@ public class ChallengeDTO {
 	private String name;
 	private Date startDate;
 	private Date endDate;
-	private double targetDistance;
-	private double targetTime;
+	private Double targetDistance;
+	private Double targetTime;
 	private String sport;
 
     // Constructor
     public ChallengeDTO() { }
     
     // Constructor with parameters
-	public ChallengeDTO(String name, Date startDate, Date endDate, double targetDistance, double targetTime,
+	public ChallengeDTO(String name, Date startDate, Date endDate, Double targetDistance, Double targetTime,
 			String sport) {
 		this.name = name;
 		this.startDate = (Date) startDate;
@@ -26,7 +26,7 @@ public class ChallengeDTO {
 		this.sport = sport;
 	}
 
-	public ChallengeDTO(String string, String string2, String string3, double d, double e, String string4) {
+	public ChallengeDTO(String string, String string2, String string3, Double d, Double e, String string4) {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -63,7 +63,7 @@ public class ChallengeDTO {
 		return targetDistance;
 	}
 
-	public void setTargetDistance(float targetDistance) {
+	public void setTargetDistance(Double targetDistance) {
 		this.targetDistance = targetDistance;
 	}
 
@@ -71,7 +71,7 @@ public class ChallengeDTO {
 		return targetTime;
 	}
 
-	public void setTargetTime(float targetTime) {
+	public void setTargetTime(Double targetTime) {
 		this.targetTime = targetTime;
 	}
 

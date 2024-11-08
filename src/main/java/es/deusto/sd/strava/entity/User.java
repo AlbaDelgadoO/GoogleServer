@@ -1,13 +1,10 @@
-/**
- * This code is based on solutions provided by ChatGPT 4o and 
- * adapted using GitHub Copilot. It has been thoroughly reviewed 
- * and validated to ensure correctness and that it is free of errors.
- */
 package es.deusto.sd.strava.entity;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import es.deusto.sd.strava.dto.UserDTO;
 
 public class User {
 
@@ -15,16 +12,17 @@ public class User {
 	private String birthdate;
 	private String height;
 	private String weight;
-	private int maxHR;
-	private int restHR;
+	private Integer maxHR;
+	private Integer restHR;
 	private String email;
+	private String password;
 	private List<TrainingSession> trainingSessions = new ArrayList<>();
 	
 	// Constructor without parameters
 	public User() {}
 	
 	// Constructor with parameters
-	public User(String name, String birthdate, String height, String weight, int maxHR, int restHR, String email) {
+	public User(String name, String birthdate, String height, String weight, Integer maxHR, Integer restHR, String email, String password) {
 		this.name = name;
 		this.birthdate = birthdate;
 		this.height = height;
@@ -32,7 +30,19 @@ public class User {
 		this.maxHR = maxHR;
 		this.restHR = restHR;
 		this.email = email;
+		this.password = password;
 	}
+	
+    public User(UserDTO userDTO) {
+        this.name = userDTO.getName();
+        this.email = userDTO.getEmail();
+        this.birthdate = userDTO.getBirthdate();
+        this.weight = userDTO.getWeight();
+        this.height = userDTO.getHeight();
+        this.maxHR = userDTO.getMaxHR();
+        this.restHR = userDTO.getRestHR();
+        this.password = userDTO.getPassword();
+    }
 
 	//  Getters and setters
 	public String getName() {
@@ -67,19 +77,19 @@ public class User {
 		this.weight = weight;
 	}
 
-	public int getMaxHR() {
+	public Integer getMaxHR() {
 		return maxHR;
 	}
 
-	public void setMaxHR(int maxHR) {
+	public void setMaxHR(Integer maxHR) {
 		this.maxHR = maxHR;
 	}
 
-	public int getRestHR() {
+	public Integer getRestHR() {
 		return restHR;
 	}
 
-	public void setRestHR(int restHR) {
+	public void setRestHR(Integer restHR) {
 		this.restHR = restHR;
 	}
 
@@ -89,6 +99,14 @@ public class User {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public List<TrainingSession> getTrainingSessions() {

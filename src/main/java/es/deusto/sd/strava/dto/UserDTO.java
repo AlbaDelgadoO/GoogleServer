@@ -1,20 +1,38 @@
 package es.deusto.sd.strava.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class UserDTO {
 	
-	private String name;
-	private String birthdate;
-	private String height;
-	private String weight;
-	private int maxHR;
-	private int restHR;
-	private String email;
+    @JsonProperty("name")
+    private String name;
+    
+    @JsonProperty("email")
+    private String email;
+    
+    @JsonProperty("password")
+    private String password;
+    
+    @JsonProperty("birthdate")
+    private String birthdate;
+    
+    @JsonProperty("weight")
+    private String weight;
+    
+    @JsonProperty("height")
+    private String height;
+    
+    @JsonProperty("maxHR")
+    private Integer maxHR;
+    
+    @JsonProperty("restHR")
+    private Integer restHR;
 	
 	// Constructor
 	public UserDTO() {	}
 	
 	// Constructor with parameters
-	public UserDTO(String name, String birthdate, String height, String weight, int maxHR, int restHR, String email) {
+	public UserDTO(String name, String birthdate, String height, String weight, Integer maxHR, Integer restHR, String email, String password) {
 		super();
 		this.name = name;
 		this.birthdate = birthdate;
@@ -23,6 +41,7 @@ public class UserDTO {
 		this.maxHR = maxHR;
 		this.restHR = restHR;
 		this.email = email;
+		this.password = password;
 	}
 
 	// Getters and Setters
@@ -58,19 +77,19 @@ public class UserDTO {
 		this.weight = weight;
 	}
 
-	public int getMaxHR() {
+	public Integer getMaxHR() {
 		return maxHR;
 	}
 
-	public void setMaxHR(int maxHR) {
+	public void setMaxHR(Integer maxHR) {
 		this.maxHR = maxHR;
 	}
 
-	public int getRestHR() {
+	public Integer getRestHR() {
 		return restHR;
 	}
 
-	public void setRestHR(int restHR) {
+	public void setRestHR(Integer restHR) {
 		this.restHR = restHR;
 	}
 
@@ -81,5 +100,13 @@ public class UserDTO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+	public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 	
 }

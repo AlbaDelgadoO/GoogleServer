@@ -1,8 +1,3 @@
-/**
- * This code is based on solutions provided by ChatGPT 4o and 
- * adapted using GitHub Copilot. It has been thoroughly reviewed 
- * and validated to ensure correctness and that it is free of errors.
- */
 package es.deusto.sd.strava.entity;
 
 import java.util.Date;
@@ -12,24 +7,50 @@ public class Challenge {
 	private String name;
 	private Date startDate;
 	private Date endDate;
-	private double targetDistance;
-	private double targetTime;
+	private Double targetDistance;
+	private Double targetTime;
 	private String sport;
 
 	// Constructor without parameters
 	public Challenge() {
 	}
+	
+	public Challenge(String name, Date startDate, Date endDate, Double targetDistance, Double targetTime, String sport) {
+	    this.name = name;
+	    this.startDate = startDate;
+	    this.endDate = endDate;
+	    this.targetDistance = targetDistance;
+	    this.targetTime = targetTime;
+	    this.sport = sport;
 
-	// Constructor with parameters
-	public Challenge(String name, Date startDate, Date endDate, double targetDistance, double targetTime, String sport) {
-		super();
-		this.name = name;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.targetDistance = targetDistance;
-		this.targetTime = targetTime;
-		this.sport = sport;
-	}
+        if (this.targetDistance == null && this.targetTime == null) {
+                throw new IllegalArgumentException("Challenge must have either targetDistance or targetTime, but not both or neither.");
+            }
+
+        if (this.targetDistance != null) {
+            if (this.targetDistance <= 0) {
+                throw new IllegalArgumentException("Target distance must be greater than 0.");
+            }
+        }
+
+        if (this.targetTime != null) {
+            if (this.targetTime <= 0) {
+                throw new IllegalArgumentException("Target time must be greater than 0.");
+            }
+        }
+
+        if (this.startDate == null || this.endDate == null) {
+            throw new IllegalArgumentException("Start date and end date must not be null.");
+        }
+
+        if (this.startDate.after(this.endDate)) {
+            throw new IllegalArgumentException("Start date must be before end date.");
+        }
+
+        if (this.sport == null || this.sport.isEmpty()) {
+            throw new IllegalArgumentException("Sport must not be null or empty.");
+        }
+    }
 
 	// Getters and setters
 	public String getName() {
@@ -56,19 +77,19 @@ public class Challenge {
 		this.endDate = endDate;
 	}
 
-	public double getTargetDistance() {
+	public Double getTargetDistance() {
 		return targetDistance;
 	}
 
-	public void setTargetDistance(float targetDistance) {
+	public void setTargetDistance(Double targetDistance) {
 		this.targetDistance = targetDistance;
 	}
 
-	public double getTargetTime() {
+	public Double getTargetTime() {
 		return targetTime;
 	}
 
-	public void setTargetTime(float targetTime) {
+	public void setTargetTime(Double targetTime) {
 		this.targetTime = targetTime;
 	}
 
@@ -82,19 +103,21 @@ public class Challenge {
 
 	// hashCode and equals
 	@Override
-	public int hashCode() {
-		return Objects.hash(name);
-	}
+    public int hashCode() {
+        return Objects.hash(name, startDate, endDate);
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Challenge other = (Challenge) obj;
-		return Objects.equals(name, other.name);
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (!(obj instanceof Challenge))
+            return false;
+        Challenge other = (Challenge) obj;
+        return Objects.equals(name, other.name) &&
+               Objects.equals(startDate, other.startDate) &&
+               Objects.equals(endDate, other.endDate);
+    }
 }
