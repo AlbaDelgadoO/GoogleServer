@@ -84,9 +84,12 @@ This project is a RESTful API for a sports tracking application similar to Strav
   }
 
 - **Get Training Sessions**
-- **URL**: `GET /strava/trainingSessions`  
-  **Authorization**: `your_auth_token`
-
+  **URL**: `GET /strava/trainingSessionsQuery`  
+  **Authorization:** `your_auth_token`
+  **Optional Query Parameters:**
+    `startDate: YYYY-MM-DD (e.g., 2024-11-01)`
+    `endDate: YYYY-MM-DD (e.g., 2024-11-08)`
+  
 ### Challenge Endpoints
 
 - **Create Challenge**  
