@@ -40,10 +40,10 @@ This project is a RESTful API for a sports tracking application similar to Strav
 
 ### Authentication Endpoints
 
-- **Register User**  
-  **URL**: `POST /auth/register`  
-  **Headers**: `Content-Type: application/json`  
-  **Body**:
+- **Register User**
+- **URL**: `POST /auth/register`
+- **Headers**: `Content-Type: application/json`
+- **Body**:
   ```json
   {
     "name": "John Doe",
@@ -56,10 +56,10 @@ This project is a RESTful API for a sports tracking application similar to Strav
     "restHR": 60
   }
 
-- **Login User**  
-  **URL**: `POST /auth/login`  
-  **Headers**: `Content-Type: application/json`  
-  **Body**:
+- **Login User**
+- **URL**: `POST /auth/login`
+- **Headers**: `Content-Type: application/json`
+- **Body**:
   ```json
   {
   "email": "john.doe@example.com",
@@ -69,10 +69,10 @@ This project is a RESTful API for a sports tracking application similar to Strav
 ### Training Session Endpoints
 
 - **Create Training Session**
-**URL**: `POST /strava/trainingSession`  
-  **Headers**: `Content-Type: application/json`
-  **Authorization**: `your_auth_token`
-  **Body**:
+- **URL**: `POST /strava/trainingSession`
+- **Headers**: `Content-Type: application/json`
+- **Authorization**: `your_auth_token`
+- **Body**:
   ```json
   {
   "title": "Morning Run",
@@ -84,19 +84,19 @@ This project is a RESTful API for a sports tracking application similar to Strav
   }
 
 - **Get Training Sessions**
-  **URL**: `GET /strava/trainingSessionsQuery`  
-  **Authorization:** `your_auth_token`
-  **Optional Query Parameters:**
-    `startDate: YYYY-MM-DD (e.g., 2024-11-01)`
-    `endDate: YYYY-MM-DD (e.g., 2024-11-08)`
+- **URL**: `GET /strava/trainingSessionsQuery`
+- **Authorization:** `your_auth_token`
+- **Optional Query Parameters:**
+    - `startDate: YYYY-MM-DD (e.g., 2024-11-01)`
+    - `endDate: YYYY-MM-DD (e.g., 2024-11-08)`
   
 ### Challenge Endpoints
 
-- **Create Challenge**  
-  **URL**: `POST /strava/challenge`  
-  **Headers**:  
+- **Create Challenge**
+- **URL**: `POST /strava/challenge`
+- **Headers**:  
     - `Authorization: `your_auth_token`
-  **Body**:
+- **Body**:
    ```json
      {
        "name": "Marathon Prep",
@@ -107,23 +107,23 @@ This project is a RESTful API for a sports tracking application similar to Strav
        "sport": "Running"
      }
 
-- **View Active Challenges**  
-  **URL**: `GET /strava/activeChallenges`  
-  **Headers**:  
+- **View Active Challenges**
+- **URL**: `GET /strava/activeChallenges`
+- **Headers**:  
     - `Authorization: `your_auth_token`
 
-- **Accept a Challenge**  
-  **URL**: `POST /strava/acceptChallenge`  
-  **Headers**:  
-    - `Authorization: `your_auth_token`  
-  **Parameters**:  
+- **Accept a Challenge**
+- **URL**: `POST /strava/acceptChallenge`
+- **Headers**:  
+    - `Authorization: `your_auth_token`
+- **Parameters**:  
     - `challengeName`: Name of the challenge to accept
 
-- **Check Challenge Status**  
-  **URL**: `GET /strava/challengeStatus`  
-  **Headers**:  
-    - `Authorization: `your_auth_token`  
-  **Parameters**:  
+- **Check Challenge Status**
+- **URL**: `GET /strava/challengeStatus`
+- **Headers**:  
+    - `Authorization: `your_auth_token`
+- **Parameters**:  
     - `challengeName`: Name of the challenge to check
 
 ## Project Tree
