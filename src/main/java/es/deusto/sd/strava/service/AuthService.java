@@ -1,6 +1,7 @@
 package es.deusto.sd.strava.service;
 
 import org.springframework.stereotype.Service;
+
 import es.deusto.sd.strava.entity.User;
 
 import java.util.HashMap;

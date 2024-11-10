@@ -13,6 +13,9 @@ public class TrainingSessionDTO {
     private double duration;
 
     // Constructor
+    
+    public TrainingSessionDTO() { }
+    
     public TrainingSessionDTO(String title, String sport, double distance, Date startDate, double startTime, double duration) {
         this.title = title;
         this.sport = sport;
@@ -24,6 +27,12 @@ public class TrainingSessionDTO {
 
     public TrainingSessionDTO(TrainingSession session) {
 		// TODO Auto-generated constructor stub
+    	this.title = session.getTitle();
+        this.sport = session.getSport();
+        this.distance = session.getDistanceKm();
+        this.startDate = session.getStartDate();
+        this.startTime = session.getStartTime();
+        this.duration = session.getDurationMin();
 	}
 
 	// Getters y Setters

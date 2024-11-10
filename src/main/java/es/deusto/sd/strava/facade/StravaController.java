@@ -87,8 +87,8 @@ public class StravaController {
     )
     public ResponseEntity<List<TrainingSessionDTO>> queryTrainingSessions(
             @RequestHeader("Authorization") String token,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate) {
+            @RequestParam(name = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
+            @RequestParam(name = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate) {
         try {
             Optional<User> userOpt = authService.getUserByToken(token);
             if (userOpt.isPresent()) {
@@ -102,7 +102,6 @@ public class StravaController {
                 if (sessions.isEmpty()) {
                     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
                 }
-
                 List<TrainingSessionDTO> dtos = sessions.stream()
                         .map(TrainingSessionDTO::new)
                         .collect(Collectors.toList());
@@ -162,9 +161,9 @@ public class StravaController {
     )
     public ResponseEntity<List<ChallengeDTO>> getActiveChallenges(
             @RequestHeader("Authorization") String token,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate,
-            @RequestParam(required = false) String sport) {
+            @RequestParam(name = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
+            @RequestParam(name = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate,
+            @RequestParam(name = "sport", required = false) String sport) {
         try {
             Optional<User> userOpt = authService.getUserByToken(token);
             if (userOpt.isPresent()) {
@@ -200,7 +199,7 @@ public class StravaController {
     )
     public ResponseEntity<String> acceptChallenge(
             @RequestHeader("Authorization") String token,
-            @RequestParam String challengeName) {
+            @RequestParam (name = "name", required = false) String challengeName) {
         try {
             Optional<User> userOpt = authService.getUserByToken(token);
             if (userOpt.isPresent()) {

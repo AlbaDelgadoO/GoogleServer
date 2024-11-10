@@ -135,4 +135,12 @@ public class User {
 		return Objects.equals(email, other.email) && 
 			   Objects.equals(name, other.name);
 	}
+
+	@Override
+	public String toString() {
+		return "User [name=" + name + ", birthdate=" + birthdate + ", height=" + height + ", weight=" + weight
+				+ ", maxHR=" + maxHR + ", restHR=" + restHR + ", email=" + email + ", password=" + password
+				+ ", trainingSessions=" + trainingSessions + "]";
+	}
+	
 }
