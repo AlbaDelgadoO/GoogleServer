@@ -84,27 +84,43 @@ This project is a RESTful API for a sports tracking application similar to Strav
   }
 
 - **Get Training Sessions**
-**URL**: `GET /strava/trainingSessions`  
+- **URL**: `GET /strava/trainingSessions`  
   **Authorization**: `your_auth_token`
 
 ### Challenge Endpoints
 
+- **Create Challenge**  
+  **URL**: `POST /strava/challenge`  
+  **Headers**:  
+    - `Authorization: `your_auth_token`
+  **Body**:
+   ```json
+     {
+       "id": 1,
+       "name": "Marathon Prep",
+       "startDate": "2024-02-01T00:00:00",
+       "endDate": "2024-03-01T23:59:59",
+       "distanceGoal": 42.195,
+       "timeGoal": 180,
+       "sport": "Running"
+     }
+
 - **View Active Challenges**  
   **URL**: `GET /strava/activeChallenges`  
   **Headers**:  
-    - `Authorization: Bearer your_auth_token`
+    - `Authorization: `your_auth_token`
 
 - **Accept a Challenge**  
   **URL**: `POST /strava/acceptChallenge`  
   **Headers**:  
-    - `Authorization: Bearer your_auth_token`  
+    - `Authorization: `your_auth_token`  
   **Parameters**:  
     - `challengeName`: Name of the challenge to accept
 
 - **Check Challenge Status**  
   **URL**: `GET /strava/challengeStatus`  
   **Headers**:  
-    - `Authorization: Bearer your_auth_token`  
+    - `Authorization: `your_auth_token`  
   **Parameters**:  
     - `challengeName`: Name of the challenge to check
 
