@@ -96,12 +96,11 @@ This project is a RESTful API for a sports tracking application similar to Strav
   **Body**:
    ```json
      {
-       "id": 1,
        "name": "Marathon Prep",
        "startDate": "2024-02-01T00:00:00",
        "endDate": "2024-03-01T23:59:59",
-       "distanceGoal": 42.195,
-       "timeGoal": 180,
+       "targetDistance": 42.195,
+       "targetTime": 180,
        "sport": "Running"
      }
 
