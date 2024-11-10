@@ -270,7 +270,7 @@ public class StravaController {
     )
     public ResponseEntity<String> checkChallengeStatus(
             @RequestHeader("Authorization") String token,
-            @RequestParam String challengeName) {
+            @RequestParam (name = "name", required = true) String challengeName) {
         try {
             Optional<User> userOpt = authService.getUserByToken(token);
             if (userOpt.isPresent()) {

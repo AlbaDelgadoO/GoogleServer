@@ -26,12 +26,13 @@ public class ChallengeDTO {
 		this.sport = sport;
 	}
 
-	public ChallengeDTO(String string, String string2, String string3, Double d, Double e, String string4) {
-		// TODO Auto-generated constructor stub
-	}
-
 	public ChallengeDTO(Challenge challenge) {
-		// TODO Auto-generated constructor stub
+	    this.name = challenge.getName();  
+	    this.startDate = challenge.getStartDate();  
+	    this.endDate = challenge.getEndDate();  
+	    this.targetDistance = challenge.getTargetDistance();
+	    this.targetTime = challenge.getTargetTime();
+	    this.sport = challenge.getSport(); 	
 	}
 
 	// Getters and Setters
