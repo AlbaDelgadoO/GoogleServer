@@ -23,7 +23,7 @@ public class Challenge {
 	    this.targetTime = targetTime;
 	    this.sport = sport;
 
-        if (this.targetDistance == null && this.targetTime == null) {
+        if (this.targetDistance == null && this.targetTime == null || this.targetDistance != null && this.targetTime != null) {
                 throw new IllegalArgumentException("Challenge must have either targetDistance or targetTime, but not both or neither.");
             }
 
