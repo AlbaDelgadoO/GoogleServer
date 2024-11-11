@@ -74,7 +74,7 @@ public class StravaController {
      * If startDate and endDate are provided, sessions between those dates are returned.
      * Otherwise, the last 5 sessions are returned.
      */
-    @GetMapping("/trainingSessions")
+    @GetMapping("/trainingSessionsQuery")
     @Operation(
         summary = "Query training sessions",
         description = "Retrieves a list of training sessions between specified dates or the last 5 sessions if dates are not provided",
@@ -232,7 +232,7 @@ public class StravaController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
         }
     )
-    public ResponseEntity<List<ChallengeDTO>> viewAcceptedChallenges(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<List<ChallengeDTO>> getAcceptedChallenges(@RequestHeader("Authorization") String token) {
         try {
             Optional<User> userOpt = authService.getUserByToken(token);
             if (userOpt.isPresent()) {

@@ -43,7 +43,7 @@ public class AuthController {
     }
     ***/
     @PostMapping("/register")
-    public ResponseEntity<String> register(
+    public ResponseEntity<String> registration(
             @Parameter(name = "name", description = "Name of the user", required = true, example = "Luis")
             @RequestParam("name") String name,
             @Parameter(name = "email", description = "Email of the user", required = true, example = "luis@example.com")
