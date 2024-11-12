@@ -32,8 +32,11 @@
 								{
 									"listen": "prerequest",
 									"script": {
-										"packages": {},
-										"type": "text/javascript"
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
 									}
 								}
 							],
@@ -165,7 +168,7 @@
 								"header": [
 									{
 										"key": "token",
-										"value": "193156276eb0x1.b8ef36b723c22p-2",
+										"value": "193170bf71d0x1.2a8c47ea12124p-1",
 										"type": "text"
 									}
 								],
@@ -189,21 +192,6 @@
 					"name": "trainingSessions",
 					"item": [
 						{
-							"name": "Get training sessions",
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "193158361610x1.5606be0a29f4ep-1",
-										"type": "text"
-									}
-								],
-								"url": "{{base_url}}/strava/trainingSessions"
-							},
-							"response": []
-						},
-						{
 							"name": "Create training session",
 							"event": [
 								{
@@ -225,7 +213,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "193158361610x1.5606be0a29f4ep-1",
+										"value": "193171726700x1.bf065d8e093a8p-4",
 										"type": "text"
 									}
 								],
@@ -242,6 +230,21 @@
 								"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
 							},
 							"response": []
+						},
+						{
+							"name": "Get training sessions",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "1931aec0ae50x1.08a2b8dc3450ap-2",
+										"type": "text"
+									}
+								],
+								"url": "{{base_url}}/strava/trainingSessionsQuery"
+							},
+							"response": []
 						}
 					]
 				},
@@ -249,13 +252,62 @@
 					"name": "challenge",
 					"item": [
 						{
+							"name": "Create challenge",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "193204bbcf40x1.8db43c0a57308p-3",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Race\",\r\n    \"startDate\": \"2024-10-01T17:00:53.222+00:00\",\r\n    \"endDate\": \"2025-11-01T17:00:53.222+00:00\",\r\n    \"targetDistance\": 1000,\r\n    \"targetTime\": 180.0,\r\n    \"sport\": \"Running\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{base_url}}/strava/challenge"
+							},
+							"response": []
+						},
+						{
+							"name": "Accept challenge",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "1931aec0ae50x1.08a2b8dc3450ap-2",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "Race",
+											"type": "text"
+										}
+									]
+								},
+								"url": "{{base_url}}/strava/acceptChallenge"
+							},
+							"response": []
+						},
+						{
 							"name": "Get active challenges",
 							"request": {
 								"method": "GET",
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "193158bd3a20x1.f37914d917c0bp-1",
+										"value": "1931aec0ae50x1.08a2b8dc3450ap-2",
 										"type": "text"
 									}
 								],
@@ -270,7 +322,7 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "193158bd3a20x1.f37914d917c0bp-1",
+										"value": "1931aec0ae50x1.08a2b8dc3450ap-2",
 										"type": "text"
 									}
 								],
@@ -280,29 +332,15 @@
 						},
 						{
 							"name": "Check challenge status",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
 							"request": {
 								"method": "GET",
-								"header": [],
-								"url": "{{base_url}}/strava/challengeStatus"
-							},
-							"response": []
-						},
-						{
-							"name": "Create challenge",
-							"request": {
-								"method": "POST",
-								"header": []
-							},
-							"response": []
-						},
-						{
-							"name": "Accept challenge",
-							"request": {
-								"method": "POST",
 								"header": [
 									{
 										"key": "Authorization",
-										"value": "193158bd3a20x1.f37914d917c0bp-1",
+										"value": "1931aec0ae50x1.08a2b8dc3450ap-2",
 										"type": "text"
 									}
 								],
@@ -311,12 +349,12 @@
 									"formdata": [
 										{
 											"key": "name",
-											"value": "Marathon Prep",
+											"value": "Race",
 											"type": "text"
 										}
 									]
 								},
-								"url": "{{base_url}}/strava/acceptChallenge"
+								"url": "{{base_url}}/strava/challengeStatus"
 							},
 							"response": []
 						}
