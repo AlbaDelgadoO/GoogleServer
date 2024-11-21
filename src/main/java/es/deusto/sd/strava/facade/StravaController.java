@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -41,7 +42,7 @@ public class StravaController {
     /**
      * Creates a new training session for the authenticated user.
      */
-    @PostMapping("/newTrainingSessions")
+    @PostMapping("/trainingSessions")
     @Operation(
         summary = "Create a new training session",
         description = "Creates a new training session with the provided details",
@@ -117,7 +118,7 @@ public class StravaController {
     /**
      * Creates a new challenge.
      */
-    @PostMapping("/challenges") //plural endpoints
+    @PostMapping("/challenges") 
     @Operation(
         summary = "Create a new challenge",
         description = "Creates a new challenge with the provided details",
@@ -148,7 +149,7 @@ public class StravaController {
     /**
      * Retrieves active challenges, optionally filtered by date or sport.
      */
-    @GetMapping("/activeChallenges")
+    @GetMapping("/challenges/active")
     @Operation(
         summary = "Get active challenges",
         description = "Retrieves a list of active challenges, optionally filtered by date or sport",
@@ -186,7 +187,7 @@ public class StravaController {
     /**
      * Allows the authenticated user to accept a challenge.
      */
-    @PostMapping("/acceptChallenges")
+    @PostMapping("/challenges/{name}")
     @Operation(
         summary = "Accept a challenge",
         description = "Allows the user to accept a challenge",
@@ -199,7 +200,8 @@ public class StravaController {
     )
     public ResponseEntity<String> acceptChallenge(
             @RequestHeader("Authorization") String token,
-            @RequestParam (name = "name", required = false) String challengeName) {
+            @Parameter(name = "name", description = "Challenge name", required = true, example = "Swimming Sprint")
+            @PathVariable("name") String challengeName){
         try {
             Optional<User> userOpt = authService.getUserByToken(token);
             if (userOpt.isPresent()) {
@@ -221,7 +223,7 @@ public class StravaController {
     /**
      * Retrieves the list of challenges accepted by the authenticated user.
      */
-    @GetMapping("/acceptedChallenges")
+    @GetMapping("/challenges/accepted")
     @Operation(
         summary = "View accepted challenges",
         description = "Retrieves a list of challenges accepted by the user",
@@ -257,7 +259,7 @@ public class StravaController {
     /**
      * Checks the progress status of an accepted challenge.
      */
-    @GetMapping("/challengeStatus")
+    @GetMapping("/challenges/{name}/status")
     @Operation(
         summary = "Check challenge status",
         description = "Checks the progress status of an accepted challenge",
@@ -270,7 +272,8 @@ public class StravaController {
     )
     public ResponseEntity<String> checkChallengeStatus(
             @RequestHeader("Authorization") String token,
-            @RequestParam (name = "name", required = true) String challengeName) {
+            @Parameter(name = "name", description = "Challenge name", required = true, example = "Swimming Sprint")
+            @PathVariable("name") String challengeName) {
         try {
             Optional<User> userOpt = authService.getUserByToken(token);
             if (userOpt.isPresent()) {
