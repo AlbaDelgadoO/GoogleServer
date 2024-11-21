@@ -27,6 +27,9 @@ public class UserDTO {
     
     @JsonProperty("restHR")
     private Integer restHR;
+    
+    @JsonProperty("accountType")
+    private String accountType;
 	
 	// Constructor
 	public UserDTO() {	}
@@ -108,6 +111,14 @@ public class UserDTO {
     public void setPassword(String password) {
         this.password = password;
     }
+    
+	public String getAccountType() {
+		return accountType;
+	}
+	
+	public void setAccountType(String accountType) {
+		this.accountType = accountType;
+	}
 
 	@Override
 	public String toString() {

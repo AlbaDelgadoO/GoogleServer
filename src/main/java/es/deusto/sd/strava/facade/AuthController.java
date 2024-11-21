@@ -59,10 +59,12 @@ public class AuthController {
             @Parameter(name = "maxHR", description = "Maximum heart rate", required = true, example = "180")
             @RequestParam("maxHR") int maxHR,
             @Parameter(name = "restHR", description = "Resting heart rate", required = true, example = "60")
-            @RequestParam("restHR") int restHR){
+            @RequestParam("restHR") int restHR,
+            @Parameter(name = "accountType", description = "Account type", required = true, example = "google")
+            @RequestParam("accountType") String accountType){
         
         try {
-        	User user = new User(name, birthdate, height, weight, maxHR, restHR, email, password);
+        	User user = new User(name, birthdate, height, weight, maxHR, restHR, email, password, accountType);
             Optional<User> registeredUser = authService.register(user);
             if (registeredUser.isPresent()) {
                 return new ResponseEntity<>("User registered successfully.", HttpStatus.OK);

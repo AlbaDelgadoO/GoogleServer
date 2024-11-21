@@ -41,7 +41,7 @@ public class StravaController {
     /**
      * Creates a new training session for the authenticated user.
      */
-    @PostMapping("/trainingSession")
+    @PostMapping("/newTrainingSessions")
     @Operation(
         summary = "Create a new training session",
         description = "Creates a new training session with the provided details",
@@ -74,7 +74,7 @@ public class StravaController {
      * If startDate and endDate are provided, sessions between those dates are returned.
      * Otherwise, the last 5 sessions are returned.
      */
-    @GetMapping("/trainingSessionsQuery")
+    @GetMapping("/trainingSessions")
     @Operation(
         summary = "Query training sessions",
         description = "Retrieves a list of training sessions between specified dates or the last 5 sessions if dates are not provided",
@@ -117,7 +117,7 @@ public class StravaController {
     /**
      * Creates a new challenge.
      */
-    @PostMapping("/challenge")
+    @PostMapping("/challenges") //plural endpoints
     @Operation(
         summary = "Create a new challenge",
         description = "Creates a new challenge with the provided details",
@@ -128,7 +128,7 @@ public class StravaController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
         }
     )
-    public ResponseEntity<String> createChallenge(
+    public ResponseEntity<String> createChallenge( 
             @RequestHeader("Authorization") String token,
             @RequestBody ChallengeDTO challengeDTO) {
         try {
@@ -186,7 +186,7 @@ public class StravaController {
     /**
      * Allows the authenticated user to accept a challenge.
      */
-    @PostMapping("/acceptChallenge")
+    @PostMapping("/acceptChallenges")
     @Operation(
         summary = "Accept a challenge",
         description = "Allows the user to accept a challenge",

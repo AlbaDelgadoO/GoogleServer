@@ -27,12 +27,12 @@ public class DataInit {
             try {
             	
             	// Create some users
-                User davidGoggins = new User("David Goggins", "1975-02-17", "1.85m", "86kg", 190, 60, "david@goggins.com", "password1");
-                User pedroSanchez = new User("Pedro Sanchez", "1972-02-29", "1.85m", "80kg", 180, 65, "pedro@sanchez.com", "password2");
-                User bolsonaro = new User("Bolsonaro", "1955-03-21", "1.73m", "85kg", 170, 70, "bolsonaro@politics.com", "password3");
-                User billieJoe = new User("Billie Joe", "1972-02-17", "1.70m", "70kg", 185, 62, "billiejoe@greenday.com", "password4");
-                User pabloIglesias = new User("Pablo Iglesias", "1978-10-17", "1.74m", "72kg", 175, 68, "pablo@iglesias.com", "password5");
-                User pacoLopez = new User("Paco Lopez", "1985-07-10", "1.80m", "78kg", 185, 60, "paco@lopez.com", "password6");
+                User davidGoggins = new User("David Goggins", "1975-02-17", "1.85m", "86kg", 190, 60, "david@goggins.com", "password1", "google");
+                User pedroSanchez = new User("Pedro Sanchez", "1972-02-29", "1.85m", "80kg", 180, 65, "pedro@sanchez.com", "password2", "google");
+                User bolsonaro = new User("Bolsonaro", "1955-03-21", "1.73m", "85kg", 170, 70, "bolsonaro@politics.com", "password3", "facebook");
+                User billieJoe = new User("Billie Joe", "1972-02-17", "1.70m", "70kg", 185, 62, "billiejoe@greenday.com", "password4", "google");
+                User pabloIglesias = new User("Pablo Iglesias", "1978-10-17", "1.74m", "72kg", 175, 68, "pablo@iglesias.com", "password5", "google");
+                User pacoLopez = new User("Paco Lopez", "1985-07-10", "1.80m", "78kg", 185, 60, "paco@lopez.com", "password6", "facebook");
 
                 // Register users using AuthService
                 authService.register(davidGoggins);
