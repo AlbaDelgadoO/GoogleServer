@@ -27,7 +27,7 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
-    /***
+    /*
     @PostMapping("/register")
     @Operation(summary = "Register a new user")
     public ResponseEntity<String> register(@RequestBody UserDTO userDTO) {
@@ -41,7 +41,7 @@ public class AuthController {
             return new ResponseEntity<>("Registration failed. User may already exist.", HttpStatus.BAD_REQUEST);
         }
     }
-    ***/
+    */
     @PostMapping("/register")
     public ResponseEntity<String> registration(
             @Parameter(name = "name", description = "Name of the user", required = true, example = "Luis")
@@ -76,6 +76,7 @@ public class AuthController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+  
     /***
     @PostMapping("/login")
     @Operation(summary = "User login")
