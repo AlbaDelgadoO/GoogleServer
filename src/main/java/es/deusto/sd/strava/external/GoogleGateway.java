@@ -11,17 +11,14 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Map;
 import java.util.Optional;
-
 import org.springframework.stereotype.Component;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+
 @Component
-public class GoogleGateway {
+public class GoogleGateway implements AuthenticationInterface {
 
-    private final String API_URL = "https://api.freecurrencyapi.com/v1/latest";
-    private final String API_KEY = "fca_live_DgSapgilaF9fv0FzhAj6VwxXETqUbsIFAKMrGj2s";
-
+    private final String GOOGLE_AUTH_URL = "https://www.googleapis.com/auth2/v2/token";
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
 
@@ -29,33 +26,28 @@ public class GoogleGateway {
         this.httpClient = HttpClient.newHttpClient();
         this.objectMapper = new ObjectMapper();
     }
-    /*
-    @SuppressWarnings("unchecked")
-	public Optional<Float> getExchangeRate(String baseCurrency, String targetCurrency) {
-        // Build the URL
-        String url = API_URL + "?apikey=" + API_KEY +  "&base_currency=" + baseCurrency + "&currencies=" + targetCurrency;
 
+    public boolean validate(String email, String password) {
         try {
-            // Create the request
+            String requestBody = objectMapper.writeValueAsString(Map.of(
+                    "email", email,
+                    "password", password
+            ));
+
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .GET()
+                    .uri(URI.create(GOOGLE_AUTH_URL))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                     .build();
 
-            // Send the request and obtain the response
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-        	
-        	// If response is OK, parse the response body
-        	if (response.statusCode() == 200) {
-				Map<String, Object> exchangeRates = objectMapper.readValue(response.body(), Map.class);
-				exchangeRates = (Map<String, Object>) exchangeRates.get("data");			
-				return Optional.of(Float.parseFloat(exchangeRates.get(targetCurrency).toString()));			
-			} else {
-				return Optional.empty();
-			}
-        } catch (Exception ex) {
-        	return Optional.empty();
+
+            if (response.statusCode() == 200) {
+                return true;
+            }
+        } catch (Exception e) {
+            System.err.println("Error during Google authentication: " + e.getMessage());
         }
+        return false;
     }
-    */
 }
