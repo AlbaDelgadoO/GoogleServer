@@ -48,8 +48,6 @@ public class AuthController {
             @RequestParam("name") String name,
             @Parameter(name = "email", description = "Email of the user", required = true, example = "luis@example.com")
             @RequestParam("email") String email,
-            @Parameter(name = "password", description = "Password for the user", required = true, example = "pass1")
-            @RequestParam("password") String password,
             @Parameter(name = "birthdate", description = "Birthdate of the user", required = true, example = "1990-05-20")
             @RequestParam("birthdate") String birthdate,
             @Parameter(name = "weight", description = "Weight of the user", required = true, example = "70kg")
@@ -64,7 +62,7 @@ public class AuthController {
             @RequestParam("accountType") String accountType){
         
         try {
-        	User user = new User(name, birthdate, height, weight, maxHR, restHR, email, password, accountType);
+        	User user = new User(name, birthdate, height, weight, maxHR, restHR, email, accountType);
             Optional<User> registeredUser = authService.register(user);
             if (registeredUser.isPresent()) {
                 return new ResponseEntity<>("User registered successfully.", HttpStatus.OK);

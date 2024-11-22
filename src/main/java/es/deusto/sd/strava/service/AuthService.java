@@ -1,5 +1,6 @@
 package es.deusto.sd.strava.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import es.deusto.sd.strava.entity.User;
@@ -11,8 +12,8 @@ import java.util.Optional;
 @Service
 public class AuthService {
 
-    // Simulate a user repository
-    private final Map<String, User> userRepository = new HashMap<>();
+	@Autowired
+    private UserRepository userRepository;
 
     // Store tokens and associated users
     private final Map<String, User> tokenStore = new HashMap<>();

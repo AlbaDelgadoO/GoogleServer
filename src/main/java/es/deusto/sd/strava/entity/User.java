@@ -15,7 +15,6 @@ public class User {
 	private Integer maxHR;
 	private Integer restHR;
 	private String email;
-	private String password;
 	private String accountType;
 	private List<TrainingSession> trainingSessions = new ArrayList<>();
 	
@@ -23,7 +22,7 @@ public class User {
 	public User() {}
 	
 	// Constructor with parameters
-	public User(String name, String birthdate, String height, String weight, Integer maxHR, Integer restHR, String email, String password, String accountType) {
+	public User(String name, String birthdate, String height, String weight, Integer maxHR, Integer restHR, String email, String accountType) {
 		this.name = name;
 		this.birthdate = birthdate;
 		this.height = height;
@@ -31,7 +30,6 @@ public class User {
 		this.maxHR = maxHR;
 		this.restHR = restHR;
 		this.email = email;
-		this.password = password;
 	}
 	
     public User(UserDTO userDTO) {
@@ -42,7 +40,6 @@ public class User {
         this.height = userDTO.getHeight();
         this.maxHR = userDTO.getMaxHR();
         this.restHR = userDTO.getRestHR();
-        this.password = userDTO.getPassword();
         this.accountType = userDTO.getAccountType();
     }
 
@@ -103,14 +100,6 @@ public class User {
 		this.email = email;
 	}
 	
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	
 	public String getAccountType() {
 		return accountType;
 	}
@@ -149,7 +138,7 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [name=" + name + ", birthdate=" + birthdate + ", height=" + height + ", weight=" + weight
-				+ ", maxHR=" + maxHR + ", restHR=" + restHR + ", email=" + email + ", password=" + password + ", accountType=" + accountType + "]";
+				+ ", maxHR=" + maxHR + ", restHR=" + restHR + ", email=" + email + ", accountType=" + accountType + "]";
 	}
 	
 }
