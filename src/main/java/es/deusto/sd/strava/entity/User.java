@@ -5,9 +5,13 @@ import java.util.List;
 import java.util.Objects;
 
 import es.deusto.sd.strava.dto.UserDTO;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
+@Entity
 public class User {
-
+	@Id
 	private String name;
 	private String birthdate;
 	private String height;
@@ -16,7 +20,9 @@ public class User {
 	private Integer restHR;
 	private String email;
 	private String accountType;
-	private List<TrainingSession> trainingSessions = new ArrayList<>();
+	
+    @OneToMany(mappedBy = "user")
+    private List<TrainingSession> trainingSessions = new ArrayList<>();
 	
 	// Constructor without parameters
 	public User() {}
@@ -30,6 +36,7 @@ public class User {
 		this.maxHR = maxHR;
 		this.restHR = restHR;
 		this.email = email;
+		this.accountType = accountType;
 	}
 	
     public User(UserDTO userDTO) {

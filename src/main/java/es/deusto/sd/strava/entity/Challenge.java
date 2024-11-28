@@ -3,7 +3,12 @@ package es.deusto.sd.strava.entity;
 import java.util.Date;
 import java.util.Objects;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
 public class Challenge {
+	@Id
 	private String name;
 	private Date startDate;
 	private Date endDate;

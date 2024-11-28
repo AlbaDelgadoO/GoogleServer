@@ -2,13 +2,24 @@ package es.deusto.sd.strava.entity;
 import java.util.Date;
 import java.util.Objects;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+
+@Entity
 public class TrainingSession {
+	@Id
     private String title;
     private String sport;
     private double distanceKm;
     private Date startDate;
     private double startTime;
     private double durationMin;
+    
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;	
 
 	// Constructor without parameters
 	public TrainingSession() {
