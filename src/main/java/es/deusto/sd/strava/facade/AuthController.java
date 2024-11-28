@@ -1,15 +1,9 @@
 package es.deusto.sd.strava.facade;
-import java.awt.print.Printable;
 
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import es.deusto.sd.strava.dto.LoginDTO;
 import es.deusto.sd.strava.dto.UserDTO;
@@ -18,6 +12,7 @@ import es.deusto.sd.strava.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
@@ -27,104 +22,98 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
-    /*
+
+    /**
+     * Registers a new user in the system.
+     */
     @PostMapping("/register")
-    @Operation(summary = "Register a new user")
-    public ResponseEntity<String> register(@RequestBody UserDTO userDTO) {
-    	System.out.println("Received userDTO: " + userDTO.toString());
-    	User user = new User(userDTO);
-        Optional<User> registeredUser = authService.register(user);
-        System.out.println(registeredUser.isEmpty());
-        if (registeredUser.isPresent()) {
-            return new ResponseEntity<>("User registered successfully.", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Registration failed. User may already exist.", HttpStatus.BAD_REQUEST);
+    @Operation(
+        summary = "Register a new user",
+        description = "Registers a user with the provided details.",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "User registered successfully"),
+            @ApiResponse(responseCode = "400", description = "Registration failed. User may already exist."),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
         }
-    }
-    */
-    @PostMapping("/register")
-    public ResponseEntity<String> registration(
-            @Parameter(name = "name", description = "Name of the user", required = true, example = "Luis")
-            @RequestParam("name") String name,
-            @Parameter(name = "email", description = "Email of the user", required = true, example = "luis@example.com")
-            @RequestParam("email") String email,
-            @Parameter(name = "birthdate", description = "Birthdate of the user", required = true, example = "1990-05-20")
-            @RequestParam("birthdate") String birthdate,
-            @Parameter(name = "weight", description = "Weight of the user", required = true, example = "70kg")
-            @RequestParam("weight") String weight,
-            @Parameter(name = "height", description = "Height of the user", required = true, example = "1.75m")
-            @RequestParam("height") String height,
-            @Parameter(name = "maxHR", description = "Maximum heart rate", required = true, example = "180")
-            @RequestParam("maxHR") int maxHR,
-            @Parameter(name = "restHR", description = "Resting heart rate", required = true, example = "60")
-            @RequestParam("restHR") int restHR,
-            @Parameter(name = "accountType", description = "Account type", required = true, example = "google")
-            @RequestParam("accountType") String accountType){
-        
+    )
+    public ResponseEntity<String> register(@RequestBody UserDTO userDTO) {
         try {
-        	User user = new User(name, birthdate, height, weight, maxHR, restHR, email, accountType);
-            Optional<User> registeredUser = authService.register(user);
-            if (registeredUser.isPresent()) {
+            User user = new User(
+                userDTO.getName(),
+                userDTO.getBirthdate(),
+                userDTO.getHeight(),
+                userDTO.getWeight(),
+                userDTO.getMaxHR(),
+                userDTO.getRestHR(),
+                userDTO.getEmail(),
+                userDTO.getAccountType()
+            );
+
+            User registeredUser = authService.register(user); // Devuelve directamente el User
+            if (registeredUser != null) {
                 return new ResponseEntity<>("User registered successfully.", HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("Registration failed. User may already exist.", HttpStatus.BAD_REQUEST);
             }
-
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Error during registration: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-  
-    /***
+
+    /**
+     * Logs in a user and generates a token.
+     */
     @PostMapping("/login")
-    @Operation(summary = "User login")
+    @Operation(
+        summary = "User login",
+        description = "Validates user credentials and returns an authentication token.",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "User logged in successfully"),
+            @ApiResponse(responseCode = "401", description = "Login failed. Invalid credentials."),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+        }
+    )
     public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO) {
-        Optional<String> tokenOpt = authService.login(loginDTO.getEmail(), loginDTO.getPass());
-        if (tokenOpt.isPresent()) {
-            return new ResponseEntity<>(tokenOpt.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Login failed. Invalid credentials.", HttpStatus.UNAUTHORIZED);
+        try {
+            String token = authService.login(loginDTO.getEmail(), loginDTO.getPass()); // Devuelve directamente el token
+            if (token != null) {
+                return new ResponseEntity<>("User logged in successfully. Token: " + token, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Login failed. Invalid credentials.", HttpStatus.UNAUTHORIZED);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error during login: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-	***/
-    @PostMapping("/login")
-    @Operation(summary = "User login")
-    public ResponseEntity<String> login(
-    		            @Parameter(name = "email", description = "Email of the user", required = true, example = "luis@example.com")
-    		            @RequestParam("email") String email,
-    		            @Parameter(name = "password", description = "Password for the user", required = true, example = "pass1")
-    		            @RequestParam("password") String password) {
-    	
-        Optional<String> tokenOpt = authService.login(email, password);
-        if (tokenOpt.isPresent()) {
-            return new ResponseEntity<>("User has login successfully. Token: " + tokenOpt.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Login failed. Invalid credentials.", HttpStatus.UNAUTHORIZED);
-        }
-    }
-    /*
+
+    /**
+     * Logs out a user by invalidating their token.
+     */
     @PostMapping("/logout")
-    @Operation(summary = "User logout")
-    public ResponseEntity<String> logout(@RequestHeader("Authorization") String token) {
-        boolean result = authService.logout(token);
-        if (result) {
-            return new ResponseEntity<>("Logout successful.", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Invalid token.", HttpStatus.UNAUTHORIZED);
+    @Operation(
+        summary = "User logout",
+        description = "Invalidates the user's authentication token.",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Logout successful"),
+            @ApiResponse(responseCode = "401", description = "Invalid token."),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
         }
-    }
-    */
-    @PostMapping("/logout")
-    @Operation(summary = "User logout")
+    )
     public ResponseEntity<String> logout(
-			@Parameter(name = "token", description = "Token for the user", required = true, example = "Bearer token") 
-			@RequestHeader("token") String token
-    		) {
-        boolean result = authService.logout(token);
-        if (result) {
-            return new ResponseEntity<>("Logout successful.", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Invalid token.", HttpStatus.UNAUTHORIZED);
+            @RequestHeader("Authorization") @Parameter(
+                name = "token",
+                description = "Bearer token for the user",
+                required = true,
+                example = "Bearer token") String token) {
+        try {
+            boolean result = authService.logout(token);
+            if (result) {
+                return new ResponseEntity<>("Logout successful.", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Invalid token.", HttpStatus.UNAUTHORIZED);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error during logout: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

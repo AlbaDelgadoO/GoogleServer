@@ -35,7 +35,7 @@ public class UserDTO {
 	public UserDTO() {	}
 	
 	// Constructor with parameters
-	public UserDTO(String name, String birthdate, String height, String weight, Integer maxHR, Integer restHR, String email, String password) {
+	public UserDTO(String name, String birthdate, String height, String weight, Integer maxHR, Integer restHR, String email, String accountType) {
 		super();
 		this.name = name;
 		this.birthdate = birthdate;
@@ -44,7 +44,7 @@ public class UserDTO {
 		this.maxHR = maxHR;
 		this.restHR = restHR;
 		this.email = email;
-		this.password = password;
+		this.accountType = accountType;
 	}
 
 	// Getters and Setters

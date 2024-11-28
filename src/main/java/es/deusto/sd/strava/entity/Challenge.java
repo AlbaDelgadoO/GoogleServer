@@ -1,20 +1,47 @@
 package es.deusto.sd.strava.entity;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 @Entity
+@Table(name = "challenges")
 public class Challenge {
-	@Id
-	private String name;
-	private Date startDate;
-	private Date endDate;
-	private Double targetDistance;
-	private Double targetTime;
-	private String sport;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true)
+    private String name;
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date startDate;
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date endDate;
+
+    private Double targetDistance;
+    private Double targetTime;
+
+    @Column(nullable = false)
+    private String sport;
+
+    // Many-to-Many relationship with User
+    @ManyToMany(mappedBy = "acceptedChallenges")
+    private List<User> acceptedUsers;
 
 	// Constructor without parameters
 	public Challenge() {
@@ -104,6 +131,14 @@ public class Challenge {
 
 	public void setSport(String sport) {
 		this.sport = sport;
+	}
+	
+	public List<User> getAcceptedUsers() {
+		return acceptedUsers;
+	}
+
+	public void setAcceptedUsers(List<User> acceptedUsers) {
+		this.acceptedUsers = acceptedUsers;
 	}
 
 	// hashCode and equals

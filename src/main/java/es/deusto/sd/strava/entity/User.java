@@ -1,29 +1,65 @@
 package es.deusto.sd.strava.entity;
 
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Objects;
 
 import es.deusto.sd.strava.dto.UserDTO;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "users")
 public class User {
-	@Id
-	private String name;
-	private String birthdate;
-	private String height;
-	private String weight;
-	private Integer maxHR;
-	private Integer restHR;
-	private String email;
-	private String accountType;
-	
-    @OneToMany(mappedBy = "user")
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
+    private String birthdate;
+
+    @Column(nullable = false)
+    private String height;
+
+    @Column(nullable = false)
+    private String weight;
+
+    private Integer maxHR;
+    private Integer restHR;
+
+    @Column(nullable = false)
+    private String accountType;
+
+    // One-to-Many relationship with TrainingSession
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TrainingSession> trainingSessions = new ArrayList<>();
-	
+
+    // Many-to-Many relationship with Challenge
+    @ManyToMany
+    @JoinTable(
+        name = "user_challenges", // Tabla intermedia
+        joinColumns = @JoinColumn(name = "user_id"), // Clave foránea hacia "User"
+        inverseJoinColumns = @JoinColumn(name = "challenge_id") // Clave foránea hacia "Challenge"
+    )
+    private List<Challenge> acceptedChallenges = new ArrayList<>();
+    
 	// Constructor without parameters
 	public User() {}
 	

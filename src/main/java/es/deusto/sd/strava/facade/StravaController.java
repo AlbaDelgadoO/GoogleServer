@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import es.deusto.sd.strava.dto.ChallengeDTO;
 import es.deusto.sd.strava.dto.TrainingSessionDTO;
-import es.deusto.sd.strava.entity.Challenge;
 import es.deusto.sd.strava.entity.TrainingSession;
 import es.deusto.sd.strava.entity.User;
 import es.deusto.sd.strava.service.AuthService;
@@ -40,6 +39,15 @@ public class StravaController {
     private ChallengeService challengeService;
 
     /**
+     * Validates the token and retrieves the user.
+     */
+    private ResponseEntity<User> validateToken(String token) {
+        Optional<User> userOpt = authService.getUserByToken(token);
+        return userOpt.map(ResponseEntity::ok)
+                .orElse(new ResponseEntity<>(HttpStatus.UNAUTHORIZED));
+    }
+
+    /**
      * Creates a new training session for the authenticated user.
      */
     @PostMapping("/trainingSessions")
@@ -56,24 +64,22 @@ public class StravaController {
     public ResponseEntity<String> createTrainingSession(
             @RequestHeader("Authorization") String token,
             @RequestBody TrainingSessionDTO sessionDTO) {
+        ResponseEntity<User> userResponse = validateToken(token);
+        if (!userResponse.getStatusCode().is2xxSuccessful()) {
+            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
+        }
+
         try {
-            Optional<User> userOpt = authService.getUserByToken(token);
-            if (userOpt.isPresent()) {
-                User user = userOpt.get();
-                trainingSessionService.createTrainingSession(user.getEmail(), sessionDTO);
-                return new ResponseEntity<>("Training session created successfully", HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
-            }
+            User user = userResponse.getBody();
+            trainingSessionService.createTrainingSession(user, sessionDTO);
+            return new ResponseEntity<>("Training session created successfully", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Error creating training session", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Error creating training session: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     /**
      * Retrieves training sessions for the authenticated user.
-     * If startDate and endDate are provided, sessions between those dates are returned.
-     * Otherwise, the last 5 sessions are returned.
      */
     @GetMapping("/trainingSessions")
     @Operation(
@@ -90,26 +96,25 @@ public class StravaController {
             @RequestHeader("Authorization") String token,
             @RequestParam(name = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
             @RequestParam(name = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate) {
+        ResponseEntity<User> userResponse = validateToken(token);
+        if (!userResponse.getStatusCode().is2xxSuccessful()) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         try {
-            Optional<User> userOpt = authService.getUserByToken(token);
-            if (userOpt.isPresent()) {
-                User user = userOpt.get();
-                List<TrainingSession> sessions;
-                if (startDate != null && endDate != null) {
-                    sessions = trainingSessionService.getTrainingSessionsByDate(user.getEmail(), startDate, endDate);
-                } else {
-                    sessions = trainingSessionService.getRecentTrainingSessions(user.getEmail());
-                }
-                if (sessions.isEmpty()) {
-                    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-                }
-                List<TrainingSessionDTO> dtos = sessions.stream()
-                        .map(TrainingSessionDTO::new)
-                        .collect(Collectors.toList());
-                return new ResponseEntity<>(dtos, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            User user = userResponse.getBody();
+            List<TrainingSession> sessions = (startDate != null && endDate != null)
+                    ? trainingSessionService.getTrainingSessionsByDate(user.getEmail(), startDate, endDate)
+                    : trainingSessionService.getRecentTrainingSessions(user.getEmail());
+
+            if (sessions.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
+
+            List<TrainingSessionDTO> dtos = sessions.stream()
+                    .map(TrainingSessionDTO::new)
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(dtos, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -129,25 +134,24 @@ public class StravaController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
         }
     )
-    public ResponseEntity<String> createChallenge( 
+    public ResponseEntity<String> createChallenge(
             @RequestHeader("Authorization") String token,
             @RequestBody ChallengeDTO challengeDTO) {
+        ResponseEntity<User> userResponse = validateToken(token);
+        if (!userResponse.getStatusCode().is2xxSuccessful()) {
+            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
+        }
+
         try {
-            Optional<User> userOpt = authService.getUserByToken(token);
-            if (userOpt.isPresent()) {
-                challengeService.createChallenge(challengeDTO);
-                // [Opcional] Enviar correo electrónico de confirmación al creador del desafío
-                return new ResponseEntity<>("Challenge created successfully", HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
-            }
+            challengeService.createChallenge(challengeDTO);
+            return new ResponseEntity<>("Challenge created successfully", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Error creating challenge", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Error creating challenge: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     /**
-     * Retrieves active challenges, optionally filtered by date or sport.
+     * Retrieves active challenges.
      */
     @GetMapping("/challenges/active")
     @Operation(
@@ -165,20 +169,17 @@ public class StravaController {
             @RequestParam(name = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
             @RequestParam(name = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate,
             @RequestParam(name = "sport", required = false) String sport) {
+        ResponseEntity<User> userResponse = validateToken(token);
+        if (!userResponse.getStatusCode().is2xxSuccessful()) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         try {
-            Optional<User> userOpt = authService.getUserByToken(token);
-            if (userOpt.isPresent()) {
-                List<Challenge> challenges = challengeService.getActiveChallenges(startDate, endDate, sport);
-                if (challenges.isEmpty()) {
-                    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-                }
-                List<ChallengeDTO> dtos = challenges.stream()
-                        .map(ChallengeDTO::new)
-                        .collect(Collectors.toList());
-                return new ResponseEntity<>(dtos, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            }
+        	List<ChallengeDTO> challenges = challengeService.getActiveChallenges(startDate, endDate, sport);
+        	if (challenges.isEmpty()) {
+        	    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        	}
+        	return new ResponseEntity<>(challenges, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -202,21 +203,21 @@ public class StravaController {
             @RequestHeader("Authorization") String token,
             @Parameter(name = "name", description = "Challenge name", required = true, example = "Swimming Sprint")
             @PathVariable("name") String challengeName){
+        ResponseEntity<User> userResponse = validateToken(token);
+        if (!userResponse.getStatusCode().is2xxSuccessful()) {
+            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
+        }
+
         try {
-            Optional<User> userOpt = authService.getUserByToken(token);
-            if (userOpt.isPresent()) {
-                User user = userOpt.get();
-                boolean success = challengeService.acceptChallenge(user.getEmail(), challengeName);
-                if (success) {
-                    return new ResponseEntity<>("Challenge accepted successfully", HttpStatus.OK);
-                } else {
-                    return new ResponseEntity<>("Challenge not found", HttpStatus.NOT_FOUND);
-                }
+            User user = userResponse.getBody();
+            boolean success = challengeService.acceptChallenge(user.getEmail(), challengeName);
+            if (success) {
+                return new ResponseEntity<>("Challenge accepted successfully", HttpStatus.OK);
             } else {
-                return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>("Challenge not found", HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {
-            return new ResponseEntity<>("Error accepting challenge", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Error accepting challenge: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -235,24 +236,20 @@ public class StravaController {
         }
     )
     public ResponseEntity<List<ChallengeDTO>> getAcceptedChallenges(@RequestHeader("Authorization") String token) {
-        try {
-            Optional<User> userOpt = authService.getUserByToken(token);
-            if (userOpt.isPresent()) {
-                User user = userOpt.get();
-                List<Challenge> challenges = challengeService.getAcceptedChallenges(user.getEmail());
-                if (challenges.isEmpty()) {
-                    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-                }
+        ResponseEntity<User> userResponse = validateToken(token);
+        if (!userResponse.getStatusCode().is2xxSuccessful()) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
 
-                List<ChallengeDTO> dtos = challenges.stream()
-                        .map(ChallengeDTO::new)
-                        .collect(Collectors.toList());
-                return new ResponseEntity<>(dtos, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        try {
+        	User user = userResponse.getBody();
+            List<ChallengeDTO> challenges = challengeService.getAcceptedChallenges(user.getEmail());
+            if (challenges.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
+            return new ResponseEntity<>(challenges, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        	return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -274,25 +271,24 @@ public class StravaController {
             @RequestHeader("Authorization") String token,
             @Parameter(name = "name", description = "Challenge name", required = true, example = "Swimming Sprint")
             @PathVariable("name") String challengeName) {
+        ResponseEntity<User> userResponse = validateToken(token);
+        if (!userResponse.getStatusCode().is2xxSuccessful()) {
+            return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
+        }
+
         try {
-            Optional<User> userOpt = authService.getUserByToken(token);
-            if (userOpt.isPresent()) {
-                User user = userOpt.get();
-                List<TrainingSession> userSessions = trainingSessionService.getAllTrainingSessions(user.getEmail());
-                double progress = challengeService.checkChallengeStatus(user.getEmail(), challengeName, userSessions);
-                if (progress >= 0) {
-                    return new ResponseEntity<>("Challenge progress: " + String.format("%.2f", progress) + "%", HttpStatus.OK);
-                } else {
-                    return new ResponseEntity<>("Challenge not found or not accepted", HttpStatus.NOT_FOUND);
-                }
+            User user = userResponse.getBody();
+            List<TrainingSession> userSessions = trainingSessionService.getAllTrainingSessions(user.getEmail());
+            double progress = challengeService.checkChallengeStatus(user.getEmail(), challengeName, userSessions);
+            if (progress >= 0) {
+                return new ResponseEntity<>("Challenge progress: " + String.format("%.2f", progress) + "%", HttpStatus.OK);
             } else {
-                return new ResponseEntity<>("Invalid token", HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>("Challenge not found or not accepted", HttpStatus.NOT_FOUND);
             }
         } catch (IllegalStateException | IllegalArgumentException e) {
-            // Manejar desafíos inválidos
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            return new ResponseEntity<>("Error checking challenge status", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Error checking challenge status: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -2,24 +2,47 @@ package es.deusto.sd.strava.entity;
 import java.util.Date;
 import java.util.Objects;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 @Entity
+@Table(name = "training_sessions")
 public class TrainingSession {
-	@Id
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false)
     private String sport;
+
+    @Column(nullable = false)
     private double distanceKm;
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date startDate;
+
+    @Column(nullable = false)
     private double startTime;
+
+    @Column(nullable = false)
     private double durationMin;
-    
+
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;	
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
 	// Constructor without parameters
 	public TrainingSession() {
