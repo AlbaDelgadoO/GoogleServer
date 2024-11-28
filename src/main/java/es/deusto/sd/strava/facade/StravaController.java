@@ -118,7 +118,7 @@ public class StravaController {
     /**
      * Creates a new challenge.
      */
-    @PostMapping("/challenges") 
+    @PostMapping("/challenges")
     @Operation(
         summary = "Create a new challenge",
         description = "Creates a new challenge with the provided details",

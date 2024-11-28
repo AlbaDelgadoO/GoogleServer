@@ -11,9 +11,10 @@ import java.util.Optional;
 
 @Service
 public class AuthService {
-
+	
+    // Simulate a user repository
 	@Autowired
-    private UserRepository userRepository;
+    private final Map<String, User> userRepository = new HashMap<>();
 
     // Store tokens and associated users
     private final Map<String, User> tokenStore = new HashMap<>();
