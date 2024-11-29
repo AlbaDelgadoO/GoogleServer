@@ -5,8 +5,10 @@ import org.springframework.stereotype.Service;
 
 import es.deusto.sd.strava.dao.UserRepository;
 import es.deusto.sd.strava.entity.User;
+import es.deusto.sd.strava.external.AuthenticationInterface;
 import es.deusto.sd.strava.external.FacebookGateway;
 import es.deusto.sd.strava.external.GoogleGateway;
+import es.deusto.sd.strava.external.factory.AuthenticationProviderFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,21 +34,38 @@ public class AuthService {
         }
         return userRepository.save(user);
     }
+    
+    public AuthenticationInterface createProviderGateway(String providerType) {
+        AuthenticationInterface gateway;
 
+        switch (providerType.toLowerCase()) {
+            case "google":
+                gateway = googleGateway;
+                break;
+            case "facebook":
+                gateway = facebookGateway;
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported provider type: " + providerType);
+        }
+
+        return gateway;
+    }
+    
     public String login(String email, String password) {
+        // Fetch the user from the database
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        boolean isValid = switch (user.getAccountType().toLowerCase()) {
-            case "google" -> googleGateway.validate(email, password);
-            case "facebook" -> facebookGateway.validate(email, password);
-            default -> throw new IllegalArgumentException("Unsupported account type");
-        };
+        // Use the factory to get the appropriate gateway
+        AuthenticationInterface gateway = AuthenticationProviderFactory.createProviderGateway(user.getAccountType());
 
-        if (!isValid) {
+        // Validate credentials
+        if (!gateway.validate(email, password)) {
             throw new IllegalArgumentException("Invalid credentials");
         }
 
+        // Generate token
         String token = generateToken();
         tokenStore.put(token, user);
         return token;
