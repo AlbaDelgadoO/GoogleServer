@@ -21,27 +21,27 @@ public class TrainingSession {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String sport;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private double distanceKm;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
     private Date startDate;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private double startTime;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private double durationMin;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = true)
     private User user;
 
 	// Constructor without parameters
