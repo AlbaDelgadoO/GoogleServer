@@ -29,7 +29,7 @@ public class TrainingSessionService {
     }
 
     public List<TrainingSession> getRecentTrainingSessions(String email) {
-        return trainingSessionRepository.findTop5ByUserEmailOrderByDateDesc(email);
+        return trainingSessionRepository.findTop5ByUserEmailOrderByStartDateDesc(email);
     }
 
     public List<TrainingSession> getTrainingSessionsByDate(String email, Date startDate, Date endDate) {

@@ -15,7 +15,7 @@ public interface TrainingSessionRepository extends JpaRepository<TrainingSession
     List<TrainingSession> findByUserEmailAndStartDateBetween(String email, Date startDate, Date endDate);
 
     // Obtener las últimas 5 sesiones de un usuario
-    List<TrainingSession> findTop5ByUserEmailOrderByDateDesc(String email);
+    List<TrainingSession> findTop5ByUserEmailOrderByStartDateDesc(String email);
 
     // Obtener todas las sesiones de un usuario
     List<TrainingSession> findByUserEmail(String email);
