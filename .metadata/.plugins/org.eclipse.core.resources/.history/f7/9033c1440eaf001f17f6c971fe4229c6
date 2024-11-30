@@ -1,0 +1,5 @@
+package es.desuto.sd.google.entity;
+
+public class GoogleUser {
+
+}

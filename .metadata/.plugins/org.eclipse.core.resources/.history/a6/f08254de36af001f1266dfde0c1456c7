@@ -1,0 +1,10 @@
+spring.application.name=FacebookServer
+spring.output.ansi.enabled=ALWAYS
+server.port=8081
+
+# Socket-based server configuration
+facebook.server.host=localhost
+facebook.server.port=9000
+
+# Enable debug logging for connections
+logging.level.org.springframework.web=DEBUG

@@ -1,0 +1,19 @@
+package es.deusto.sd.google;
+
+import es.deusto.sd.google.entity.GoogleUser;
+import es.deusto.sd.google.repository.GoogleUserRepository;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class GoogleServerDataInit {
+
+    @Bean
+    CommandLineRunner initData(GoogleUserRepository userRepository) {
+        return args -> {
+            userRepository.save(new GoogleUser("user1@gmail.com", "password1"));
+            userRepository.save(new GoogleUser("user2@gmail.com", "password2"));
+        };
+    }
+}

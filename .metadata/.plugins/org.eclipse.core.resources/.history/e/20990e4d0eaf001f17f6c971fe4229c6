@@ -1,0 +1,28 @@
+package es.deusto.sd.google.entity;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "google_users")
+public class GoogleUser {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true, nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private String password;
+
+    public GoogleUser() {
+    }
+
+    public GoogleUser(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    // Getters and Setters
+}

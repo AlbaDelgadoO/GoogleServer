@@ -1,0 +1,33 @@
+spring.application.name=StravaAPI
+spring.output.ansi.enabled=ALWAYS
+server.port=8080
+
+# H2 database configuration
+spring.datasource.url=jdbc:h2:mem:stravadb
+spring.datasource.driver-class-name=org.h2.Driver
+spring.datasource.username=strava-user
+spring.datasource.password=strava-password
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+
+spring.sql.init.platform=h2
+
+# Enable H2 console in the browser
+spring.h2.console.enabled=true
+spring.h2.console.path=/h2-console
+
+# Auto-generate the database schema
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.open-in-view=false
+
+# Show SQL statements in the console
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+# External services configuration
+google.service.url=http://localhost:8082/google/validate
+facebook.service.host=localhost
+facebook.service.port=9000
+
+# Logging level for debugging
+logging.level.org.hibernate.SQL=DEBUG
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE

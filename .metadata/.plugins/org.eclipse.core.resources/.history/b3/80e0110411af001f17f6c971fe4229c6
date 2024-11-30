@@ -1,0 +1,59 @@
+@Service
+public class AuthService {
+
+    private final UserRepository userRepository;
+    private final GoogleGateway googleGateway;
+    private final FacebookGateway facebookGateway;
+    private final Map<String, String> tokenStore = new HashMap<>();
+
+    public AuthService(UserRepository userRepository, GoogleGateway googleGateway, FacebookGateway facebookGateway) {
+        this.userRepository = userRepository;
+        this.googleGateway = googleGateway;
+        this.facebookGateway = facebookGateway;
+    }
+
+    public void register(String email, String password, String accountType) {
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new IllegalArgumentException("User already exists.");
+        }
+
+        boolean isValid = switch (accountType.toLowerCase()) {
+            case "google" -> googleGateway.validate(email, password);
+            case "facebook" -> facebookGateway.validate(email, password);
+            default -> throw new IllegalArgumentException("Invalid account type.");
+        };
+
+        if (isValid) {
+            userRepository.save(new User(email, password, accountType));
+        } else {
+            throw new IllegalArgumentException("Invalid credentials.");
+        }
+    }
+
+    public String login(String email, String password) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found."));
+
+        boolean isValid = switch (user.getAccountType().toLowerCase()) {
+            case "google" -> googleGateway.validate(email, password);
+            case "facebook" -> facebookGateway.validate(email, password);
+            default -> false;
+        };
+
+        if (isValid) {
+            String token = generateToken();
+            tokenStore.put(token, email);
+            return token;
+        } else {
+            throw new IllegalArgumentException("Invalid credentials.");
+        }
+    }
+
+    public boolean logout(String token) {
+        return tokenStore.remove(token) != null;
+    }
+
+    private String generateToken() {
+        return UUID.randomUUID().toString();
+    }
+}
